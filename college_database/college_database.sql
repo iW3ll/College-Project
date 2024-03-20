@@ -4,7 +4,7 @@ CREATE DATABASE IF NOT EXISTS collegeSubjects;
 -- Use the created database
 USE collegeSubjects;
 */
--- commented above because in some online compiler database give error, uncomment if wil execute in local 
+-- Commented above because in some online compiler database, give error, uncomment if it will execute in local 
 
 -- Create Users table
 CREATE TABLE IF NOT EXISTS Users (
@@ -38,11 +38,21 @@ INSERT INTO Users (username, email) VALUES
 
 -- Insert sample data into Subjects table with Computer Science Bachelor degree
 INSERT INTO Subjects (subject_name, degree) VALUES
+('Logic and Programming Language', 'Computer Science Bachelor'),  
 ('Introduction to Computer Science', 'Computer Science Bachelor'),
 ('Introduction to Math', 'Computer Science Bachelor'),
+('Digital Circuits', , 'Computer Science Bachelor'),
+('Data Struct', 'Computer Science Bachelor'),
+('Computer Architecture', 'Computer Science Bachelor'),
+('Calculus', 'Computer Science Bachelor'),
+('Algebra', 'Computer Science Bachelor'),
+('Statistical Probability', 'Computer Science Bachelor')
+('Data File Organization', 'Computer Science Bachelor')
 ('Oriented Object Programming', 'Computer Science Bachelor'),
 ('Data Structures and Algorithms', 'Computer Science Bachelor'),
 ('Database Management Systems', 'Computer Science Bachelor'),
+('Formal languages and automata', 'Computer Science Bachelor'),
+('Computer Theory', 'Computer Science Bachelor'),
 ('Operating Systems', 'Computer Science Bachelor'),
 ('Computer Networks', 'Computer Science Bachelor'),
 ('Software Engineering', 'Computer Science Bachelor'),
@@ -54,7 +64,7 @@ FROM Subjects
 WHERE degree = 'Computer Science Bachelor';
 
 
--- Inserting enrollment for Oriented Object Programming in semester 2024.1
+-- Inserting enrollment for Wesley Luiz in Oriented Object Programming in semester 2024.1 
 INSERT INTO Enrollment (user_id, subject_id, semester) 
 VALUES (
     (SELECT user_id FROM Users WHERE username = 'Wesley Luiz'), -- Getting user_id for Wesley Luiz
@@ -62,18 +72,16 @@ VALUES (
     '2024.1'
 );
 
--- Inserting enrollment for Introduction to Math in semester 2024.2
 INSERT INTO Enrollment (user_id, subject_id, semester) 
 VALUES (
-    (SELECT user_id FROM Users WHERE username = 'Wesley Luiz'), -- Getting user_id for Wesley Luiz
+    (SELECT user_id FROM Users WHERE username = 'Wesley Luiz'), 
     (SELECT subject_id FROM Subjects WHERE subject_name = 'Introduction to Math'), -- Getting subject_id for Introduction to Math
     '2024.2'
 );
 
--- Inserting enrollment for Oriented Object Programming in semester 2024.1 for Brenda Oliveira
 INSERT INTO Enrollment (user_id, subject_id, semester) 
 VALUES (
-    (SELECT user_id FROM Users WHERE username = 'Brenda Oliveira'), -- Getting user_id for Brenda Oliveira
+    (SELECT user_id FROM Users WHERE username = 'Brenda Oliveira'),
     (SELECT subject_id FROM Subjects WHERE subject_name = 'Oriented Object Programming'), -- Getting subject_id for Oriented Object Programming
     '2024.1'
 );
