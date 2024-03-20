@@ -41,7 +41,7 @@ INSERT INTO Subjects (subject_name, degree) VALUES
 ('Logic and Programming Language', 'Computer Science Bachelor'),  
 ('Introduction to Computer Science', 'Computer Science Bachelor'),
 ('Introduction to Math', 'Computer Science Bachelor'),
-('Digital Circuits', , 'Computer Science Bachelor'),
+('Digital Circuits', 'Computer Science Bachelor'),
 ('Data Struct', 'Computer Science Bachelor'),
 ('Computer Architecture', 'Computer Science Bachelor'),
 ('Calculus', 'Computer Science Bachelor'),
