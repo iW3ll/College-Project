@@ -2,9 +2,9 @@ import javax.swing.*;
 import java.sql.*;
 
 public class LoginSystem {
-    private static final String DB_URL = "linkToDB";
-    private static final String DB_USER = "username";
-    private static final String DB_PASSWORD = "password";
+    private static final String DB_URL = "sql10.freesqldatabase.com";
+    private static final String DB_USER = "sql10694573";
+    private static final String DB_PASSWORD = "PeQ3W2MXxB";
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(LoginSystem::createAndShowGUI);
