@@ -1,79 +1,133 @@
 import javax.swing.*;
-import java.sql.*;
+import javax.swing.border.EmptyBorder;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-public class LoginSystem {
-    private static final String DB_URL = "sql10.freesqldatabase.com";
-    private static final String DB_USER = "sql10694573";
-    private static final String DB_PASSWORD = "PeQ3W2MXxB";
+public class LoginScreen extends JFrame implements ActionListener {
+    private JTextField usernameField;
+    private JPasswordField passwordField;
+    private boolean isRegistering = false;
 
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(LoginSystem::createAndShowGUI);
-    }
+    public LoginScreen() {
+        setTitle("Login");
+        setSize(300, 200);
+        setResizable(false); // Prevent maximizing
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLayout(new BorderLayout());
+        setMaximumSize(new Dimension(300, 400)); // Increase maximum height
 
-    private static void createAndShowGUI() {
-        JFrame frame = new JFrame("Login");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setResizable(false);
-
-        JPanel panel = new JPanel();
-        GroupLayout layout = new GroupLayout(panel);
-        panel.setLayout(layout);
-        layout.setAutoCreateGaps(true);
-        layout.setAutoCreateContainerGaps(true);
+        JPanel contentPanel = new JPanel();
+        contentPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
+        contentPanel.setLayout(new GridLayout(3, 2));
 
         JLabel usernameLabel = new JLabel("Username:");
-        JTextField usernameField = new JTextField(20);
+        contentPanel.add(usernameLabel);
+
+        usernameField = new JTextField();
+        contentPanel.add(usernameField);
 
         JLabel passwordLabel = new JLabel("Password:");
-        JPasswordField passwordField = new JPasswordField(20);
+        contentPanel.add(passwordLabel);
+
+        passwordField = new JPasswordField();
+        contentPanel.add(passwordField);
+
+        add(contentPanel, BorderLayout.CENTER);
+
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
 
         JButton loginButton = new JButton("Login");
+        loginButton.addActionListener(this);
+        buttonPanel.add(loginButton);
 
-        layout.setHorizontalGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
-                .addComponent(usernameLabel)
-                .addComponent(usernameField)
-                .addComponent(passwordLabel)
-                .addComponent(passwordField)
-                .addComponent(loginButton)
-        );
+        JButton registerButton = new JButton("Register");
+        registerButton.addActionListener(this);
+        buttonPanel.add(registerButton);
 
-        layout.setVerticalGroup(layout.createSequentialGroup()
-                .addComponent(usernameLabel)
-                .addComponent(usernameField)
-                .addComponent(passwordLabel)
-                .addComponent(passwordField)
-                .addComponent(loginButton)
-        );
+        add(buttonPanel, BorderLayout.SOUTH);
 
-        loginButton.addActionListener(e -> {
-            String username = usernameField.getText();
-            String password = new String(passwordField.getPassword());
-
-            if (login(username, password)) {
-                JOptionPane.showMessageDialog(frame, "Login successful!", "Message", JOptionPane.INFORMATION_MESSAGE);
-            } else {
-                JOptionPane.showMessageDialog(frame, "Invalid username or password", "Error", JOptionPane.ERROR_MESSAGE);
-            }
-        });
-
-        frame.getContentPane().add(panel);
-        frame.pack();
-        frame.setLocationRelativeTo(null); // Center the frame on the screen
-        frame.setVisible(true);
+        setVisible(true);
     }
 
-    private static boolean login(String username, String password) {
-        try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
-             PreparedStatement stmt = conn.prepareStatement("SELECT * FROM Users WHERE username = ? AND password = ?")) {
-
-            stmt.setString(1, username);
-            stmt.setString(2, password);
-            ResultSet rs = stmt.executeQuery();
-
-            return rs.next(); // If any row matches, return true (valid login)
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-            return false; // Return false in case of any database error
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        String command = e.getActionCommand();
+        if (command.equals("Login")) {
+            // Handle login button click
+            String username = usernameField.getText();
+            String password = new String(passwordField.getPassword());
+            // Implement login functionality here
+            System.out.println("Logging in with username: " + username + " and password: " + password);
+        } else if (command.equals("Register")) {
+            if (!isRegistering) {
+                addRegistrationFields();
+            } else {
+                removeRegistrationFields();
+            }
+            isRegistering = !isRegistering;
+            revalidate();
+            repaint();
         }
+    }
+
+    private void addRegistrationFields() {
+        JLabel matriculaLabel = new JLabel("Matricula:");
+        JTextField matriculaField = new JTextField();
+
+        JLabel emailLabel = new JLabel("Email:");
+        JTextField emailField = new JTextField();
+
+        JLabel passwordLabel = new JLabel("Password:");
+        JPasswordField passwordField = new JPasswordField();
+
+        JPanel contentPanel = (JPanel) getContentPane();
+        contentPanel.setLayout(new GridLayout(7, 2));
+        contentPanel.add(matriculaLabel);
+        contentPanel.add(matriculaField);
+        contentPanel.add(emailLabel);
+        contentPanel.add(emailField);
+        contentPanel.add(passwordLabel);
+        contentPanel.add(passwordField);
+
+        JButton backButton = new JButton("Back");
+        backButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                removeRegistrationFields();
+                isRegistering = false;
+                revalidate();
+                repaint();
+            }
+        });
+        contentPanel.add(backButton);
+
+        JButton checkButton = new JButton("Check");
+        checkButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Implement registration information validation here
+                String matricula = matriculaField.getText();
+                String email = emailField.getText();
+                String password = new String(passwordField.getPassword());
+                System.out.println("Validating registration details: Matricula - " + matricula + ", Email - " + email + ", Password - " + password);
+            }
+        });
+        contentPanel.add(checkButton);
+    }
+
+    private void removeRegistrationFields() {
+        JPanel contentPanel = (JPanel) getContentPane();
+        contentPanel.setLayout(new GridLayout(3, 2));
+        Component[] components = contentPanel.getComponents();
+        for (Component component : components) {
+            contentPanel.remove(component);
+        }
+        contentPanel.revalidate();
+        contentPanel.repaint();
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(LoginScreen::new);
     }
 }
