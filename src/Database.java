@@ -13,7 +13,7 @@ public class Database {
     public static void insertUser(String fullName, String email, String password) {
         try (Connection conn = DriverManager.getConnection(
                 "jdbc:mysql://" + DB_HOST + ":" + DB_PORT + "/" + DB_NAME, DB_USER, DB_PASSWORD)) {
-            String insertSQL = "INSERT INTO users (name, email, password) VALUES (?, ?, ?)";
+            String insertSQL = "INSERT INTO users (name, email, password, semester) VALUES (?, ?, ?, 1)";
             try (PreparedStatement stmt = conn.prepareStatement(insertSQL)) {
                 stmt.setString(1, fullName);
                 stmt.setString(2, email);

@@ -68,7 +68,13 @@ public class RegisterScreen extends JFrame implements ActionListener {
         String email = emailField.getText();
         String password = new String(passwordField.getPassword());
 
+        // Call method to insert user into database
         Database.insertUser(fullName, email, password);
+
+        // Display success message
+        JOptionPane.showMessageDialog(this, "Account created successfully");
+
+        // Hide current frame and show login screen
         setVisible(false);
         loginScreen.setVisible(true);
     }
