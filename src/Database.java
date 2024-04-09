@@ -10,7 +10,7 @@ public class Database {
     private static final String DB_USER = "root";
     private static final String DB_PASSWORD = "";
     
-    // Add data in DB users table 
+    // Add data in database users table 
     public static void insertUser(String fullName, String email, String password) {
         try (Connection conn = DriverManager.getConnection(
                 "jdbc:mysql://" + DB_HOST + ":" + DB_PORT + "/" + DB_NAME, DB_USER, DB_PASSWORD)) {
