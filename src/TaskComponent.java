@@ -102,6 +102,7 @@ public class TaskComponent extends JPanel implements ActionListener {
         }
     }
 
+    // Adiciona e remove tanto do BD quanto o GUI, atualizando na mesma hora no GUI
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == saveButton) {
@@ -113,9 +114,10 @@ public class TaskComponent extends JPanel implements ActionListener {
             }
         } else if (e.getSource() == deleteButton) {
             deleteTaskFromDatabase(); // Remove a tarefa do banco de dados
-            ((JPanel) this.getParent()).remove(this); // Remove o componente do painel pai
-            this.getParent().revalidate();
-            this.getParent().repaint();
+            JPanel parentPanel = (JPanel) this.getParent(); // Obtém o painel pai
+            parentPanel.remove(this); // Remove o componente da tarefa do painel pai
+            parentPanel.revalidate(); // Revalida o painel pai
+            parentPanel.repaint(); // Repainta o painel pai
         } else {
             if (checkBox.isSelected()) {
                 String taskText = taskField.getText().replaceAll("<[^>]*>", "");
