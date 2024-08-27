@@ -11,6 +11,8 @@ import java.sql.SQLException;
 
 public class ToDoListGui extends JFrame implements ActionListener {
     private JPanel taskPanel, taskComponentPanel;
+    private JTextField taskInputField; // Caixa de texto para a nova tarefa
+    private JButton addTaskButton; // Botão para adicionar a nova tarefa
 
     public ToDoListGui() {
         super("To Do List Application");
@@ -26,7 +28,7 @@ public class ToDoListGui extends JFrame implements ActionListener {
     }
 
     private void addGuiComponents() {
-        // banner text
+        // Banner de texto
         JLabel bannerLabel = new JLabel("To Do List");
         bannerLabel.setFont(createFont("LEMONMILK-Light.otf", 36f)); // Usa fonte padrão se não encontrar o arquivo
         bannerLabel.setHorizontalAlignment(SwingConstants.CENTER);
@@ -44,13 +46,22 @@ public class ToDoListGui extends JFrame implements ActionListener {
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         taskPanel.add(scrollPane, BorderLayout.CENTER);
 
-        // add task button
-        JButton addTaskButton = new JButton("Add Task");
+        // Input field e botão Add Task
+        JPanel inputPanel = new JPanel();
+        inputPanel.setLayout(new BorderLayout());
+
+        taskInputField = new JTextField();
+        taskInputField.setFont(createFont("LEMONMILK-Light.otf", 18f)); // Usa fonte padrão se não encontrar o arquivo
+        inputPanel.add(taskInputField, BorderLayout.CENTER);
+
+        addTaskButton = new JButton("Adicionar");
         addTaskButton.setFont(createFont("LEMONMILK-Light.otf", 18f)); // Usa fonte padrão se não encontrar o arquivo
         addTaskButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         addTaskButton.addActionListener(this);
+        inputPanel.add(addTaskButton, BorderLayout.EAST);
+
+        add(inputPanel, BorderLayout.SOUTH);
         add(taskPanel, BorderLayout.CENTER);
-        add(addTaskButton, BorderLayout.SOUTH);
     }
 
     private Font createFont(String resource, float size) {
@@ -77,21 +88,26 @@ public class ToDoListGui extends JFrame implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        String command = e.getActionCommand();
-        if (command.equalsIgnoreCase("Add Task")) {
-            // Cria um componente de tarefa
-            TaskComponent taskComponent = new TaskComponent(taskComponentPanel);
-            taskComponentPanel.add(taskComponent);
+        if (e.getSource() == addTaskButton) {
+            String taskText = taskInputField.getText().trim();
+            if (!taskText.isEmpty()) {
+                // Cria um componente de tarefa
+                TaskComponent taskComponent = new TaskComponent(taskComponentPanel);
+                taskComponent.setTaskText(taskText, false); // Define o texto e o estado inicial (não concluído)
+                taskComponent.addTaskToDatabase(taskText); // Armazena a tarefa no banco de dados
+                taskComponent.setEditable(false); // Desativa a edição da tarefa inicialmente
+                taskComponentPanel.add(taskComponent);
 
-            // Atualiza a interface
-            taskComponentPanel.revalidate();
-            taskComponentPanel.repaint();
+                // Limpa a caixa de texto
+                taskInputField.setText("");
+
+                // Atualiza a interface
+                taskComponentPanel.revalidate();
+                taskComponentPanel.repaint();
+            }
         }
     }
 
-
-
-    // Carrega tarefas existentes do banco de dados
     private void loadTasksFromDatabase() {
         try (Connection conn = DatabaseManager.getConnection();
              PreparedStatement stmt = conn.prepareStatement("SELECT * FROM tasks");
@@ -103,11 +119,11 @@ public class ToDoListGui extends JFrame implements ActionListener {
                 int id = rs.getInt("id");
 
                 TaskComponent taskComponent = new TaskComponent(taskComponentPanel);
-                taskComponent.getTaskField().setText(taskText);
-                if (completed) {
-                    taskComponent.getCheckBox().setSelected(true);
-                }
+                taskComponent.setTaskText(taskText, completed); // Define o texto e o estado (completo ou não)
                 taskComponent.setId(id); // Define o ID da tarefa
+
+                // Define o estado inicial da edição e o fundo do campo de texto
+                taskComponent.setEditable(false); // Inicialmente não editável
                 taskComponentPanel.add(taskComponent);
             }
         } catch (SQLException e) {
