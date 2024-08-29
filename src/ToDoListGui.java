@@ -1,4 +1,3 @@
-import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -6,6 +5,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import javax.swing.*;
 
 public class ToDoListGui extends JFrame implements ActionListener {
     private JPanel taskPanel, taskComponentPanel;
@@ -25,6 +25,7 @@ public class ToDoListGui extends JFrame implements ActionListener {
         JLabel bannerLabel = new JLabel("To Do List");
         bannerLabel.setFont(new Font("Arial", Font.BOLD, 24));
         bannerPanel.add(bannerLabel);
+        
 
         // Painel de componentes de tarefa
         taskComponentPanel = new JPanel();
@@ -87,6 +88,7 @@ public class ToDoListGui extends JFrame implements ActionListener {
                 taskComponentPanel.add(taskComponent);
                 taskComponentPanel.revalidate();
                 taskComponentPanel.repaint();
+                taskComponent.scrollRectToVisible(taskComponent.getBounds());
                 taskInputField.setText(""); // Limpa a caixa de texto após adicionar a tarefa
             }
         }
