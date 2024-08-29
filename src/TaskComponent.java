@@ -7,15 +7,23 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class TaskComponent extends JPanel implements ActionListener {
     private JCheckBox checkBox;
     private JTextPane taskField;
+    private JLabel dateTimeLabel; // Label para a data e hora
     private JButton deleteButton;
-    private JButton editButton; // Botão de editar
+    private JButton editButton;
     private int id; // ID da tarefa no banco de dados
 
     public TaskComponent(JPanel parentPanel) {
+        // Adiciona o campo de data e hora
+        dateTimeLabel = new JLabel();
+        dateTimeLabel.setFont(new Font("SansSerif", Font.PLAIN, 12));
+        updateDateTimeLabel(); // Atualiza o label com a data e hora atuais
+
         // task field
         taskField = new JTextPane();
         taskField.setBorder(BorderFactory.createLineBorder(Color.BLACK));
@@ -41,11 +49,22 @@ public class TaskComponent extends JPanel implements ActionListener {
         editButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         editButton.addActionListener(this);
 
-        // Adiciona componentes ao painel da tarefa
-        add(checkBox);
-        add(taskField);
-        add(editButton); // Adiciona o botão "Edit"
-        add(deleteButton);
+        // Adiciona os componentes ao painel da tarefa
+        setLayout(new BorderLayout()); // Usa BorderLayout para organizar componentes
+        add(dateTimeLabel, BorderLayout.NORTH); // Adiciona a data e hora acima do campo de texto
+        add(taskField, BorderLayout.CENTER);
+        JPanel actionPanel = new JPanel(new FlowLayout(FlowLayout.LEFT)); // Para organizar os botões e checkbox
+        actionPanel.add(checkBox);
+        actionPanel.add(editButton);
+        actionPanel.add(deleteButton);
+        add(actionPanel, BorderLayout.SOUTH);
+    }
+
+    // Atualiza o label com a data e hora atuais
+    private void updateDateTimeLabel() {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yy HH:mm");
+        String dateTime = dateFormat.format(new Date());
+        dateTimeLabel.setText(dateTime);
     }
 
     // Habilita ou desabilita a edição do campo de tarefa
