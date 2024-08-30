@@ -1,3 +1,6 @@
+package main;
+
+import view.ToDoListGui;
 import javax.swing.*;
 
 public class App {
